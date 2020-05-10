@@ -51,7 +51,7 @@ def exercise_1_1():
     print()
 
     # b)
-    cipher_wheel.change_shift(7)
+    cipher_wheel.set_shift(7)
     encrypted = "AOLYLHYLUVZLJYLAZILAALYAOHUAOLZLJYLAZAOHALCLYFIVKFNBLZZLZ"
     decrypted = cipher_wheel.decrypt(encrypted)
     # -> therearenosecretsbetterthanthesecretsthateverybodyguesses
