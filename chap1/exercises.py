@@ -12,35 +12,18 @@ N_COLS = int(popen("stty size", "r").read().split()[1])
 print_center = lambda s, f: print(str.center(s, N_COLS, f))
 
 
-class CipherWheel:
-    def __init__(self, shift: int) -> None:
-        self.shift = shift % M
-
-    def set_shift(self, new_shift: int) -> None:
-        self.shift = new_shift % M
-
-    def encrypt(self, message: str) -> str:
-        plaintext = "".join(char for char in str.lower(message) if char in SYMBOLS)
-        return "".join(self._encrypt_char(char) for char in plaintext)
-
-    def decrypt(self, ciphertext: str) -> str:
-        assert all(char in UPPER_SYMBOLS for char in ciphertext)
-        return "".join(self._decrypt_char(char) for char in ciphertext)
-
-    def _encrypt_char(self, char: str) -> str:
-        return UPPER_SYMBOLS[(SYMBOLS.find(char) + self.shift) % M]
-
-    def _decrypt_char(self, char: str) -> str:
-        return SYMBOLS[(UPPER_SYMBOLS.find(char) - self.shift) % M]
+# --------------------------------------------------------------------------------
 
 
 def print_crypt(text: str) -> None:
+    marks_end_of_word = lambda n: n % 5 == 4
+    marks_end_of_line = lambda n: n % (5 * CRYPT_COLS) == 5 * CRYPT_COLS - 1
     for i, char in enumerate(text):
         print(char, end="")
-        if i % 5 == 4:
+        if marks_end_of_word(i):
             print(" ", end="")
-        if i % (5 * CRYPT_COLS) == 5 * CRYPT_COLS - 1:
-            print("\n", end="")
+        if marks_end_of_line(i):
+            print()
     print()
 
 
@@ -56,6 +39,57 @@ def excercise_header(text: str) -> Callable:
         return wrapper
 
     return decorator
+
+
+# --------------------------------------------------------------------------------
+
+
+class TrivialCipher:
+    def encrypt(self, message: str) -> str:
+        plaintext = "".join(char for char in str.lower(message) if char in SYMBOLS)
+        return "".join(self._encrypt_char(char) for char in plaintext)
+
+    def decrypt(self, ciphertext: str) -> str:
+        assert all(char in UPPER_SYMBOLS for char in ciphertext)
+        return "".join(self._decrypt_char(char) for char in ciphertext)
+
+    def _encrypt_char(self, char: str) -> str:
+        return str.upper(char)
+
+    def _decrypt_char(self, char: str) -> str:
+        return str.lower(char)
+
+
+class CipherWheel(TrivialCipher):
+    def __init__(self, shift: int) -> None:
+        self.shift = shift % M
+
+    def set_shift(self, new_shift: int) -> None:
+        self.shift = new_shift % M
+
+    def _encrypt_char(self, char: str) -> str:
+        return UPPER_SYMBOLS[(SYMBOLS.find(char) + self.shift) % M]
+
+    def _decrypt_char(self, char: str) -> str:
+        return SYMBOLS[(UPPER_SYMBOLS.find(char) - self.shift) % M]
+
+
+class SubstitutionCipher(TrivialCipher):
+    def __init__(self, permuted_symbols: str) -> None:
+        assert all(char.isupper() for char in permuted_symbols)
+        assert all(str.lower(char) in SYMBOLS for char in permuted_symbols)
+        assert len(permuted_symbols) == len(SYMBOLS)
+        self._cipher = {k: v for k, v in zip(SYMBOLS, permuted_symbols)}
+        self._decipher = {v: k for k, v in self._cipher.items()}
+
+    def _encrypt_char(self, char: str) -> str:
+        return self._cipher[char]
+
+    def _decrypt_char(self, char: str) -> str:
+        return self._decipher[char]
+
+
+# --------------------------------------------------------------------------------
 
 
 @excercise_header(" Exercise 1.1. ")
@@ -89,6 +123,9 @@ def exercise_1_1() -> None:
     print_helper(encrypted, decrypted)
 
 
+# --------------------------------------------------------------------------------
+
+
 @excercise_header(" Exercise 1.2. ")
 def exercise_1_2(show_only_solution: bool = True) -> None:
     cipher_wheel = CipherWheel(0)
@@ -106,7 +143,68 @@ def exercise_1_2(show_only_solution: bool = True) -> None:
         print()
 
 
+# --------------------------------------------------------------------------------
+
+
+@excercise_header(" Exercise 1.3. ")
+def exercise_1_3() -> None:
+    def print_helper(encr: str, decr: str, message: Optional[str] = None) -> None:
+        if message:
+            print(message)
+        print_crypt(encr)
+        print_crypt(decr)
+        print()
+
+    permuted_symbols = "SCJAXUFBQKTPRWEZHVLIGYDNMO"
+    subst_cipher = SubstitutionCipher(permuted_symbols)
+
+    print("a)")
+    message = "The gold is hidden in the garden."
+    encrypted = subst_cipher.encrypt(message)
+    decrypted = subst_cipher.decrypt(encrypted)
+    print_helper(encrypted, decrypted, message)
+
+    print("b)")
+    for CHAR in UPPER_SYMBOLS:
+        print(f"  {CHAR}", end="")
+    print()
+    for char in subst_cipher.decrypt(UPPER_SYMBOLS):
+        print(f"  {char}", end="")
+    print("\n")
+
+    print("c)")
+    encrypted = "IBXLXJVXIZSLLDEVAQLLDEVAUQLB"
+    decrypted = subst_cipher.decrypt(encrypted)
+    print_helper(encrypted, decrypted)
+
+
+# --------------------------------------------------------------------------------
+
+
+@excercise_header(" Exercise 1.4. ")
+def exercise_1_4() -> None:
+    pass
+
+
+@excercise_header(" Exercise 1.5. ")
+def exercise_1_5() -> None:
+    pass
+
+
+@excercise_header(" Exercise 1.6. ")
+def exercise_1_6() -> None:
+    pass
+
+
+# ================================================================================
+# ================================================================================
+
+
 if __name__ == "__main__":
     print_center(" Exercises chapter 1 ", "=")
-    exercise_1_1()  # skip=True)
-    exercise_1_2(show_only_solution=False)  # skip=True)
+    exercise_1_1(skip=False)  # skip=True)
+    exercise_1_2(skip=False, show_only_solution=True)  # skip=True)
+    exercise_1_3(skip=False)
+    exercise_1_4(skip=False)
+    exercise_1_5(skip=False)
+    exercise_1_6(skip=False)
