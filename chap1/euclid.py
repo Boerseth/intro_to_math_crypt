@@ -19,14 +19,14 @@ def solve_lin(a: int, b: int) -> Tuple[int, int]:
                au + bv = gcd(a, b)
     """
     # Special cases:
-    if a == 0 or b == 0:
-        return copysign(1, a), copysign(1, b)
     if a < 0:
         u, v = solve_lin(-a, b)
         return -u, v
     if b < 0:
         u, v = solve_lin(a, -b)
         return u, -v
+    if a == 0 or b == 0:
+        return copysign(1, a), copysign(1, b)
 
     # Simplify problem
     gcd_ab = gcd(a, b)
