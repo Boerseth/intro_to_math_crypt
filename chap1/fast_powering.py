@@ -2,7 +2,7 @@ from time import time
 from typing import Callable, Iterable, List
 
 
-def get_base_two(number: int) -> List[str]:
+def get_base_two(number: int) -> str:
     return bin(number)[2:]
 
 
