@@ -1,8 +1,6 @@
 from typing import List, Tuple
 from math import copysign
 
-import numpy as np
-
 
 def gcd(a: int, b: int) -> int:
     return abs(a) if b == 0 else gcd(b, a % b)
@@ -26,7 +24,7 @@ def solve_lin(a: int, b: int) -> Tuple[int, int]:
         u, v = solve_lin(a, -b)
         return u, -v
     if a == 0 or b == 0:
-        return copysign(1, a), copysign(1, b)
+        return int(copysign(1, a)), int(copysign(1, b))
 
     # Simplify problem
     gcd_ab = gcd(a, b)
