@@ -1,0 +1,178 @@
+===================================== Exercises chapter 1 ======================================
+---------------------------------------- Exercise 1.1. -----------------------------------------
+a)
+A page of history is worth a volume of logic.
+LALRP ZQSTD EZCJT DHZCE SLGZW FXPZQ WZRTN 
+apage ofhis toryi swort havol umeof logic 
+
+b)
+AOLYL HYLUV ZLJYL AZILA ALYAO HUAOL ZLJYL AZAOH ALCLY FIVKF 
+NBLZZ LZ
+there areno secre tsbet terth anthe secre tstha tever ybody 
+guess es
+
+c)
+XJHRF TNZHM ZGAHI UETXZ JNBWN UTRHE POMDN BJMAU GORFA OIZOC 
+C
+whena ngryc ountt enbef oreyo uspea kifve ryang ryanh undre 
+d
+
+---------------------------------------- Exercise 1.2. -----------------------------------------
+a)
+ithin kthat ishal lneve rseea billb oardl ovely asatr ee
+
+b)
+lovei snotl ovewh ichal tersw henit alter ation finds 
+
+c)
+inbai tinga mouse trapw ithch eesea lways leave roomf orthe 
+mouse 
+
+---------------------------------------- Exercise 1.3. -----------------------------------------
+a)
+The gold is hidden in the garden.
+IBXFE PAQLB QAAXW QWIBX FSVAX W
+thego ldish idden inthe garde n
+
+b)
+  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z
+  d  h  b  w  o  g  u  q  t  c  j  s  y  x  z  l  i  m  a  k  f  r  n  e  v  p
+
+c)
+IBXLX JVXIZ SLLDE VAQLL DEVAU QLB
+these cretp asswo rdiss wordf ish
+
+---------------------------------------- Exercise 1.4. -----------------------------------------
+---------------------------------------- Exercise 1.5. -----------------------------------------
+a)
+The number of simple substitution ciphers for a 26 letter alphabet is
+the number of ways to permute 26 objects. This number is 
+    26! = 26*25*24*...
+
+b)
+The number of permutations that leave no letter fixed is known as the
+number of "derangements", often denoted  !n . More generally, if we
+want to permute  n  objects leaving  k  of them fixed, we are dealing
+with "partial derangements", and the number of possible suitable 
+permutations is referred to as the "rencontres number" for  n  and  k.
+These are typically denoted
+               # of partial derangements
+    D_{n, k} = of  n  objects that leave
+               k  of them fixed
+
+(i) We want to find  D_{n, 0} = !n  for  n=26.  We might try to seek
+a closed form expression for  !n , but would quickly come to realize
+that this is very difficult to do. (There is a delightfully elegant
+and wholly surprising way to do it, but it is not easy to derive)
+
+Instead, let us see if we can find some recurrence relation for the
+numbers  !n .
+
+When placing the first letter, "a", we have  n-1  options that put it
+in a different place.
+
+Say we place it in spot number 2, belonging to "b". Then, how many
+ways are there to permute the remaining  n-1  letters?
+
+We could either put the letter "b" in "a"'s spot, and derange the
+remaining  n-2  letters. That could be done in  !(n-2)  ways.
+Or, we could avoid putting "b" in "a"'s spot, which we might realise
+can be done in  !(n-1)  ways.
+
+This is true for every one of the  n-1  options we had for the
+position of "a", and so we arrive at the recurrence relation
+    !n = (n-1) * (!(n-1) + !(n-2))
+With this, we can compute  !26  recursively:    
+  n=0:  !n=1
+  n=1:  !n=0
+  n=2:  !n=1
+  n=3:  !n=2
+  n=4:  !n=9
+  n=5:  !n=44
+  n=6:  !n=265
+  n=7:  !n=1854
+  n=8:  !n=14833
+  n=9:  !n=133496
+  n=10:  !n=1334961
+  n=11:  !n=14684570
+  n=12:  !n=176214841
+  n=13:  !n=2290792932
+  n=14:  !n=32071101049
+  n=15:  !n=481066515734
+  n=16:  !n=7697064251745
+  n=17:  !n=130850092279664
+  n=18:  !n=2355301661033953
+  n=19:  !n=44750731559645106
+  n=20:  !n=895014631192902121
+  n=21:  !n=18795307255050944540
+  n=22:  !n=413496759611120779881
+  n=23:  !n=9510425471055777937262
+  n=24:  !n=228250211305338670494289
+  n=25:  !n=5706255282633466762357224
+  n=26:  !n=148362637348470135821287825
+If we compare this result to  n! , we get
+    n! / !n
+  = 403291461126605635584000000 / 148362637348470135821287825
+  = 2.718281828459045
+which is a curiously good approximation of the constant  e ...    
+(ii) We now want to find the number of permutations with at least one
+letter fixed. This is easy, knowing the total number of permutations,
+being  n! , and the number of derangements, being  !n . The answer is
+    n! - !n
+  = 403291461126605635584000000 - 148362637348470135821287825
+  = 254928823778135499762712175    
+(iii) Now, how many with exactly one fixed letter? That is, we want
+to compute  D_{n, 1}. There are  n  choices we can make for the fixed
+letter. The rest will have to be deranged, which can be done in 
+D_{n-1, 0} = !(n-1)  ways. So, we get
+    D_{n, 1} = n * D_{n-1, 0}    
+  = 26 * 5706255282633466762357224
+  = 148362637348470135821287824
+( In general, there are  nCk  ways to choose the  k  fixed letters in
+the permutation, and the remaining  n-k must be deranged. That is,
+    D_{n, k} = nCk * D_{n-k, 0}   
+which makes it easy to calculate any number  D_{n, k}. )    
+(iv) Knowing the values  n!, D_{26, 0}, D_{26, 1}  it is easy to find
+the number of permutations leaving at least 2 letters fixed. There
+are  n! , and only  D_{26, 0} + D_{26, 1}  that do not satisfy the
+requirement. so the answer is
+    n! - D_{n, 0} - D_{n, 1}
+    26! - !26 - 26 * !25
+  = 403291461126605635584000000
+              - 148362637348470135821287825 - 148362637348470135821287824
+  = 106566186429665363941424351
+
+---------------------------------------- Exercise 1.6. -----------------------------------------
+Prove:
+a)  that a|b  and  b|c , then  a|c
+By definition,
+    a|b  <=> b = an,    and     b|c  <=> c = bm
+for some integers  n,m ,
+    =>  c = bm = anm = ak  <=>  a|c
+Which was what we wanted to show            []
+
+b)  that if  a|b  and  b|a , then  b = +- a
+By the same logic as in (a), we here see that, for some ints.  m,n :
+    b = an  and  a = bm
+    =>  b = bmn
+    => mn = 1
+This is only possible for the pairs of integers  
+    (n,m) = (1,1) or (-1,-1)
+i.e. either   b = a   or   b = -a,
+i.e.    b = +- a                            []
+
+c)  that if  a|b  and  a|c ,  then  a|(b+c)  and  a|(b-c)
+By definition,
+    a|b, a|c    <=>     b = an,  c = am
+    =>  b+-c = an+-am = a(m+-n)
+    <=>  a|(b+-c)                           []
+    
+---------------------------------------- Exercise 1.7. -----------------------------------------
+a)  34787  =  98 * 353 + 193
+
+a)  238792  =  30 * 7843 + 3502
+
+a)  9829387493  =  11253 * 873485 + 60788
+
+a)  1498387487  =  19625 * 76348 + 57987
+
